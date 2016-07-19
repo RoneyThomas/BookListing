@@ -8,9 +8,6 @@ import android.view.ViewGroup;
 
 import me.roneythomas.booklisting.R;
 
-/**
- * Created by roneythomas on 2016-07-17.
- */
 public class InfoFragment extends Fragment {
     public static InfoFragment newInstance() {
 

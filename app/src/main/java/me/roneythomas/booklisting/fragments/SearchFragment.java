@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,6 @@ public class SearchFragment extends ListFragment {
         SearchFragment fragment = new SearchFragment();
         fragment.setArguments(args);
         args.putString(URL_KEY, URL);
-        Log.d("SearchFragment", "newInstance: " + URL);
         return fragment;
     }
 
@@ -44,7 +42,6 @@ public class SearchFragment extends ListFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         try {
-            Log.d("SearchFragment", getArguments().getString(URL_KEY));
             booksArrayList = new BookSearchTask().execute(getArguments().getString(URL_KEY)).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
