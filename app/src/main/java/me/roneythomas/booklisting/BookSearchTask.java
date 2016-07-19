@@ -36,6 +36,8 @@ public class BookSearchTask extends AsyncTask<String, Void, ArrayList<Book>> {
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.connect();
+            /*The result of the request is validated to account for a bad server response or lack of server response.*/
+            /*If there is no book for a given query the server responds with 304*/
             if (conn.getResponseCode() == 200) {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 String inputLine;
@@ -54,6 +56,7 @@ public class BookSearchTask extends AsyncTask<String, Void, ArrayList<Book>> {
     }
 
     private ArrayList<Book> getBooksArrayList(JSONObject jsonObject) throws JSONException {
+        /*We are checking if the server has responded with 0 books or not*/
         if (!jsonObject.getString("totalItems").equals("0")) {
             ArrayList<Book> bookArrayList = new ArrayList<>();
             JSONArray jsonList = jsonObject.getJSONArray("items");

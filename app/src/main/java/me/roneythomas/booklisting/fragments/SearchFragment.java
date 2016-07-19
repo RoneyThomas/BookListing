@@ -1,6 +1,8 @@
 package me.roneythomas.booklisting.fragments;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
@@ -9,13 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import me.roneythomas.booklisting.model.Book;
 import me.roneythomas.booklisting.BookSearchTask;
 import me.roneythomas.booklisting.R;
+import me.roneythomas.booklisting.model.Book;
 
 public class SearchFragment extends ListFragment {
     private static String URL_KEY = "query";
@@ -41,13 +44,24 @@ public class SearchFragment extends ListFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        try {
-            booksArrayList = new BookSearchTask().execute(getArguments().getString(URL_KEY)).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+        NetworkInfo networkInfo;
+        ConnectivityManager mConnectivityManager;
+        boolean isConnected;
+        mConnectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = mConnectivityManager.getActiveNetworkInfo();
+        isConnected = networkInfo != null &&
+                networkInfo.isConnectedOrConnecting();
+        if (isConnected) {
+            try {
+                booksArrayList = new BookSearchTask().execute(getArguments().getString(URL_KEY)).get();
+                SearchAdapter searchAdapter = new SearchAdapter(getContext(), booksArrayList);
+                setListAdapter(searchAdapter);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(getActivity(), R.string.toast_network_error, Toast.LENGTH_SHORT).show();
         }
-        SearchAdapter searchAdapter = new SearchAdapter(getContext(), booksArrayList);
-        setListAdapter(searchAdapter);
     }
 
     private class SearchAdapter extends ArrayAdapter<Book> {
