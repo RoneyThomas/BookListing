@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +55,13 @@ public class SearchFragment extends ListFragment {
         if (isConnected) {
             try {
                 booksArrayList = new BookSearchTask().execute(getArguments().getString(URL_KEY)).get();
-                SearchAdapter searchAdapter = new SearchAdapter(getContext(), booksArrayList);
-                setListAdapter(searchAdapter);
+                if (booksArrayList != null) {
+                    SearchAdapter searchAdapter = new SearchAdapter(getContext(), booksArrayList);
+                    setListAdapter(searchAdapter);
+                } else {
+                    Log.d("SearchFragment", "onActivityCreated: I inside the else");
+                    getFragmentManager().beginTransaction().add(R.id.contianer_main, ErrorFragment.newInstance(R.string.book_error)).commit();
+                }
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }

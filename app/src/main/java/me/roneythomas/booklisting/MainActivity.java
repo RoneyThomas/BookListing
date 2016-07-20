@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.contianer_main);
         if (!isConnected && fragment == null) {
-            fragment = ErrorFragment.newInstance();
+            fragment = ErrorFragment.newInstance(R.string.network_error);
             fragmentManager.beginTransaction().add(R.id.contianer_main, fragment).commit();
         } else if (isConnected && fragment == null) {
             fragment = InfoFragment.newInstance();

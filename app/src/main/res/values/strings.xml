@@ -3,5 +3,6 @@
     <string name="hint_search">Search for book</string>
     <string name="toast_network_error">No network connection available</string>
     <string name="network_error">Check you network connection.</string>
+    <string name="book_error">No results for your query.</string>
     <string name="search_info">Search for Book.</string>
 </resources>
